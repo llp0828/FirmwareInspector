@@ -1,0 +1,37 @@
+# Build output
+bin/
+obj/
+publish/
+artifacts/
+TestResults/
+
+# IDE and user settings
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Package and test output
+packages/
+.nuget/
+*.nupkg
+*.snupkg
+coverage/
+coverage.*
+
+# Local SMBIOS captures and sensitive machine data
+tmp/
+smbios*.ini
+type*.ini
+smbios-raw.bin
+*.dmp
+*.etl
+
+# Logs and OS files
+*.log
+Thumbs.db
+.DS_Store
+

@@ -1,0 +1,76 @@
+name: Bug report
+description: Report a reproducible parser, UI, CLI, or export problem.
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not attach real SMBIOS dumps, UUIDs, serial numbers, asset tags, or
+        unredacted screenshots. Use synthetic data or redact machine identifiers.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: v1.0.0 or commit SHA
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - WPF application
+        - CLI
+        - Core parser
+        - INI export
+        - JSON or raw export
+        - Documentation
+    validations:
+      required: true
+
+  - type: input
+    id: smbios_type
+    attributes:
+      label: SMBIOS Type or command
+      placeholder: Type 13 or FirmwareInspector.Cli.exe type 13
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      placeholder: Provide the smallest reproducible sequence.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Windows version, architecture, .NET SDK, AutoIt version if relevant.
+
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      options:
+        - label: I removed machine-specific identifiers from all attached data.
+          required: true
+

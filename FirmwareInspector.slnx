@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FirmwareInspector.App/FirmwareInspector.App.csproj" />
+    <Project Path="src/FirmwareInspector.Cli/FirmwareInspector.Cli.csproj" />
+    <Project Path="src/FirmwareInspector.Core/FirmwareInspector.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FirmwareInspector.Core.Tests/FirmwareInspector.Core.Tests.csproj" />
+  </Folder>
+</Solution>
