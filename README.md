@@ -1,17 +1,23 @@
-# Firmware Inspector
+# Firmware Inspector - Windows SMBIOS 读取、解析与导出工具
 
-A Windows SMBIOS inspection and automation toolkit built with .NET 10, WPF,
-and `GetSystemFirmwareTable('RSMB')`.
+Firmware Inspector 是一个开源的 Windows SMBIOS 读取工具，用于查看和解析
+SMBIOS 结构、检查原始固件数据、导出 JSON/INI，以及通过命令行自动读取
+SMBIOS 信息。程序使用 `GetSystemFirmwareTable('RSMB')` 直接读取本机
+`RawSMBIOSData`，不依赖 WMI，不读取 ACPI，也不会访问网络。
+
+项目提供 WPF 图形界面和独立 CLI，可用于 SMBIOS 调试、固件信息查询、
+自动化测试以及 AutoIt 等外部工具的数据读取。
+
+**English:** Firmware Inspector is an open-source Windows SMBIOS reader,
+parser and exporter built with .NET 10 and WPF. It uses
+`GetSystemFirmwareTable('RSMB')` to inspect raw SMBIOS structures and provides
+GUI, CLI, JSON, INI and binary export workflows.
 
 [![CI](https://github.com/llp0828/FirmwareInspector/actions/workflows/ci.yml/badge.svg)](https://github.com/llp0828/FirmwareInspector/actions/workflows/ci.yml)
 [![.NET](https://img.shields.io/badge/.NET-10-512BD4)](https://dotnet.microsoft.com/)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D4)
 [![License](https://img.shields.io/badge/license-MIT-2E7D32)](LICENSE)
 [![SMBIOS](https://img.shields.io/badge/SMBIOS-3.8-376AD4)](https://www.dmtf.org/standards/smbios)
-
-Firmware Inspector 面向固件工程师、驱动开发者和自动化工具开发者，用于查看、
-校验和导出本机 SMBIOS 结构。项目提供 WPF 图形界面和独立命令行程序，不读取
-ACPI、不使用 WMI、不访问网络。
 
 ## 功能
 
@@ -23,6 +29,26 @@ ACPI、不使用 WMI、不访问网络。
 - 支持 JSON、原始二进制和 AutoIt 友好的 UTF-16 LE INI 导出。
 - 提供不启动 UI 的命令行程序，支持完整导出、结构列表和 Type/Handle 查询。
 - 自带合成 SMBIOS 测试数据，可离线运行解析与导出测试。
+
+## 下载与安装
+
+发布程序可从 [GitHub Releases](https://github.com/llp0828/FirmwareInspector/releases)
+下载。发布包为 Windows x64 自包含程序，无需单独安装 .NET Runtime。
+
+| 文件 | 用途 |
+| --- | --- |
+| `FirmwareInspector.exe` | WPF 图形界面 |
+| `FirmwareInspector.Cli.exe` | 命令行读取与导出 |
+| `FirmwareInspector-v1.0.0-win-x64.zip` | 完整 Windows x64 发布包 |
+
+## 适用场景
+
+- 查看本机 SMBIOS Type、字段、字符串集和原始字节。
+- 校验固件版本、系统信息、处理器、内存和主板结构。
+- 将 SMBIOS 数据导出为 JSON、INI 或二进制文件。
+- 在 PowerShell、CMD 或其他程序中调用 CLI 自动采集信息。
+- 使用 AutoIt `IniRead` 读取指定 Type 和 Handle 的字段值。
+- 开发或验证 SMBIOS 解析逻辑。
 
 ## 项目组成
 
@@ -64,7 +90,7 @@ SmbiosParser + SmbiosFieldParser
 - .NET SDK `10.0.x`。
 - PowerShell 7 或 Windows PowerShell 5.1。
 
-## 快速开始
+## 从源码运行
 
 ```powershell
 dotnet restore FirmwareInspector.slnx
@@ -226,6 +252,34 @@ artifacts/publish/FirmwareInspector.Cli.exe
 |-- SECURITY.md
 `-- THIRD_PARTY_NOTICES.md
 ```
+
+## 常见问题
+
+### Firmware Inspector 如何读取 SMBIOS？
+
+程序调用 Windows API `GetSystemFirmwareTable('RSMB')` 获取
+`RawSMBIOSData`，再按照 SMBIOS 结构表解析 Type、Length、Handle、字段和字符串集。
+
+### 这是 SMBIOS 查看器还是解析工具？
+
+两者都是。WPF 界面用于浏览和检查 SMBIOS 结构，Core 层负责字段解析，
+CLI 用于导出和自动化调用。
+
+### 是否支持 ACPI 或其他固件表？
+
+当前版本只处理 SMBIOS，不读取、不解析、不生成 ACPI 数据。
+
+### 能否在 AutoIt 中读取导出的 INI？
+
+可以。INI 使用唯一 `TypeN_HandleXXXX` 段名和稳定字段键，例如
+`Type13_Handle0017 / CurrentLanguage`，并采用 UTF-16 LE 编码兼容
+AutoIt `IniRead`。
+
+### 为什么没有显示 SMBIOS Entry Point Structure？
+
+`GetSystemFirmwareTable('RSMB')` 只返回 SMBIOS 数据表，不返回 `_SM2_` 或
+`_SM3_` Entry Point Structure，因此无法通过该 API 获取 EPS 校验和、
+Revision 或结构表物理地址。
 
 ## 当前边界
 
