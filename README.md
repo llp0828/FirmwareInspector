@@ -3,6 +3,7 @@
 A Windows SMBIOS inspection and automation toolkit built with .NET 10, WPF,
 and `GetSystemFirmwareTable('RSMB')`.
 
+[![CI](https://github.com/llp0828/FirmwareInspector/actions/workflows/ci.yml/badge.svg)](https://github.com/llp0828/FirmwareInspector/actions/workflows/ci.yml)
 [![.NET](https://img.shields.io/badge/.NET-10-512BD4)](https://dotnet.microsoft.com/)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D4)
 [![License](https://img.shields.io/badge/license-MIT-2E7D32)](LICENSE)
