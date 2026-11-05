@@ -1345,16 +1345,17 @@ internal static partial class SmbiosFieldParser
     }
 
     private static string DescribeEventLogAccessMethod(byte value) =>
-        value switch
+        $"0x{value:X2} - " +
+        (value switch
         {
             0x00 => "Indexed I/O: one 8-bit index, one 8-bit data",
             0x01 => "Indexed I/O: two 8-bit indexes, one 8-bit data",
             0x02 => "Indexed I/O: one 16-bit index, one 8-bit data",
             0x03 => "Memory-mapped physical 32-bit address",
             0x04 => "General-Purpose NonVolatile Data",
-            >= 0x80 => $"Firmware/OEM-specific (0x{value:X2})",
-            _ => $"Reserved (0x{value:X2})"
-        };
+            >= 0x80 => "Firmware/OEM-specific",
+            _ => "Reserved"
+        });
 
     private static string DescribeAccessAddress(byte method, uint address) =>
         method switch

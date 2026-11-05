@@ -289,6 +289,37 @@ public sealed class SmbiosParserTests
         Assert.Contains(result.Warnings, item => item.Contains("未检测到 RawSMBIOSData 头", StringComparison.Ordinal));
     }
 
+    [Theory]
+    [InlineData(0x00, "0x00 - Indexed I/O: one 8-bit index, one 8-bit data")]
+    [InlineData(0x01, "0x01 - Indexed I/O: two 8-bit indexes, one 8-bit data")]
+    [InlineData(0x02, "0x02 - Indexed I/O: one 16-bit index, one 8-bit data")]
+    [InlineData(0x03, "0x03 - Memory-mapped physical 32-bit address")]
+    [InlineData(0x04, "0x04 - General-Purpose NonVolatile Data")]
+    [InlineData(0x05, "0x05 - Reserved")]
+    [InlineData(0x80, "0x80 - Firmware/OEM-specific")]
+    public void ParsesSystemEventLogAccessMethodWithRawValue(
+        int accessMethod,
+        string expected)
+    {
+        var eventLog = Structure(
+            15,
+            0x17,
+            0x0095,
+            data =>
+            {
+                BinaryPrimitives.WriteUInt16LittleEndian(data.AsSpan(0x04, 2), 0x1000);
+                data[0x0A] = (byte)accessMethod;
+                data[0x0B] = 0x01;
+                data[0x14] = 0x01;
+                data[0x15] = 0x00;
+                data[0x16] = 0x02;
+            });
+
+        var parsed = Parse(eventLog, EndOfTable()).Structures[0];
+
+        Assert.Equal(expected, Field(parsed, "Access Method"));
+    }
+
     [Fact]
     public void AllStandardTypesHaveFieldLevelBranches()
     {
